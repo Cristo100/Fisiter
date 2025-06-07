@@ -1,0 +1,27 @@
+{
+  "name": "fisiter",
+  "version": "1.0.0",
+  "description": "tarea",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cristo100/Fisiter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cristo100/Fisiter/issues"
+  },
+  "homepage": "https://github.com/Cristo100/Fisiter#readme",
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
