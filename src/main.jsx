@@ -1,8 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-
-const App = () => {
-  return <h1>Hola Fisiternpm start</h1>
-}
+import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />)
