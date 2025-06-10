@@ -1,0 +1,11 @@
+# Ignorar dependencias
+node_modules/
+venv/
+__pycache__/
+
+# Archivos de entorno
+.env
+
+# Archivos del sistema
+.DS_Store
+*.log
