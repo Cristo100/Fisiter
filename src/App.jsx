@@ -1,25 +1,34 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Login from './pages/Login'
-import Registro from './pages/Registro'
-import Dashboard from './pages/Dashboard'
-import PrivateRoute from './components/PrivateRoute'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Registro from './pages/Registro';
+import Dashboard from './pages/Dashboard';
+import HomePage from './pages/HomePage';
+import PrivateRoute from './components/PrivateRoute';
+import Navbar from './components/NavBar';
+import SobreNosotros from './pages/SobreNosotros';
 
-export default function App() {
+function App() {
   return (
-    <Router>
+    <>
+      <Navbar /> {/* ✅ Ahora se muestra siempre */}
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
-        <Route 
-          path="/dashboard" 
+        <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+        <Route
+          path="/dashboard"
           element={
             <PrivateRoute>
               <Dashboard />
             </PrivateRoute>
-          } 
+          }
         />
+        <Route path="*" element={<h2 style={{ padding: '2rem' }}>Página no encontrada</h2>} />
       </Routes>
-    </Router>
-  )
+    </>
+  );
 }
+
+export default App;

@@ -13,45 +13,37 @@ export default function Login() {
 
     try {
       const response = await api.post('/login', { email, password: contraseña });
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.access_token);
       setError('');
       navigate('/dashboard');
     } catch (err) {
       setError('Correo o contraseña incorrectos');
-      console.error(err);
     }
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Contraseña:</label><br />
-          <input
-            type="password"
-            value={contraseña}
-            onChange={e => setContraseña(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Iniciar Sesión</button>
+    <div className="page-container">
+      <h2 className="text-center">Iniciar Sesión</h2>
+      <form onSubmit={handleSubmit} className="form-container">
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={contraseña}
+          onChange={e => setContraseña(e.target.value)}
+          required
+        />
+        <button className="button" type="submit">Iniciar Sesión</button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
-      <p>
-        ¿No tienes cuenta?{' '}
-        <Link to="/registro" style={{ color: 'blue', textDecoration: 'underline' }}>
-          Regístrate aquí
-        </Link>
+      <p className="text-center">
+        ¿No tienes cuenta? <Link to="/registro" style={{ color: 'var(--color-secondary)' }}>Regístrate aquí</Link>
       </p>
     </div>
   );

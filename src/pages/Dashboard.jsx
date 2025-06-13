@@ -9,17 +9,14 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
     api.get('/actividades')
       .then(res => {
         setActividades(res.data);
         setError('');
       })
       .catch(err => {
-        console.error(err);
         setError('Error al cargar las actividades.');
-        // Si el error es 401 (no autorizado), redirigir a login
-        if (err.response && err.response.status === 401) {
+        if (err.response?.status === 401) {
           localStorage.removeItem('token');
           navigate('/');
         }
@@ -32,12 +29,11 @@ export default function Dashboard() {
     navigate('/');
   };
 
-  if (loading) return <p>Cargando actividades...</p>;
-
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Dashboard</h2>
-      <button onClick={handleLogout}>Cerrar sesión</button>
+    <div className="page-container">
+      <h2 className="text-center">Dashboard</h2>
+      <button className="button" onClick={handleLogout}>Cerrar sesión</button>
+      {loading && <p>Cargando actividades...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {!error && actividades.length === 0 && <p>No hay actividades registradas.</p>}
       <ul>
