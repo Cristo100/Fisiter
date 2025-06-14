@@ -17,19 +17,20 @@ const Navbar = () => {
         <div className="navbar-links">
           <NavLink to="/" className="nav-link">Inicio</NavLink>
           <NavLink to="/sobre-nosotros" className="nav-link">Sobre Nosotros</NavLink>
-          {!token && (
-            <>
-              <NavLink to="/login" className="nav-link">Iniciar Sesión</NavLink>
-              <NavLink to="/registro" className="nav-link">Registrarse</NavLink>
-            </>
-          )}
+          <NavLink to="/registro" className="nav-link">Registrarse</NavLink>
+          <NavLink to="/login" className="nav-link">Iniciar Sesión</NavLink>
+          <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
+          <NavLink to="/historial" className="nav-link">Historial</NavLink>
+          <NavLink to="/ranking" className="nav-link">Ranking</NavLink>
+          <NavLink to="/recompensas" className="nav-link">Recompensas</NavLink>
           {token && (
-            <>
-              <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
-              <button onClick={handleLogout} className="nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'white' }}>
-                Cerrar sesión
-              </button>
-            </>
+            <button
+              onClick={handleLogout}
+              className="nav-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'white' }}
+            >
+              Cerrar sesión
+            </button>
           )}
         </div>
       </div>
