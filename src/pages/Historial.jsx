@@ -1,42 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import { getActivities, getTotalPoints } from '../utils/usuarios';
 
-const Historial = () => {
+export default function Historial() {
   const [actividades, setActividades] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    // Simulación: cambiar por API real
-    const dataSimulada = [
-      { id: 1, tipo: 'Caminata', duracion: 30, fecha: '2025-06-10' },
-      { id: 2, tipo: 'Bicicleta', duracion: 45, fecha: '2025-06-12' },
-    ];
-    setActividades(dataSimulada);
+    setActividades(getActivities());
+    setTotal(getTotalPoints());
   }, []);
 
   return (
-    <div className="page-container text-center">
+    <div className="page-container text-center" style={{ maxWidth: 700 }}>
       <h2>Historial de Actividades</h2>
-      <p>Revisa todas tus actividades registradas.</p>
-      <table style={{ margin: '1rem auto', width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Tipo</th>
-            <th>Duración (min)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {actividades.map((act) => (
-            <tr key={act.id}>
-              <td>{act.fecha}</td>
-              <td>{act.tipo}</td>
-              <td>{act.duracion}</td>
+      <p><strong>Puntos acumulados: {total}</strong></p>
+
+      {actividades.length === 0 ? (
+        <p>No tienes actividades registradas.</p>
+      ) : (
+        <table style={{ margin: 'auto', width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Hora</th><th>Ejercicio</th><th>Duración</th><th>Puntos</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {actividades.map(a => {
+              const d = new Date(a.fechaHora);
+              return (
+                <tr key={a.id}>
+                  <td>{d.toLocaleDateString()}</td>
+                  <td>{d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })}</td>
+                  <td>{a.tipo}</td>
+                  <td>{a.duracion} min</td>
+                  <td>{a.puntos}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
-};
-
-export default Historial;
+}

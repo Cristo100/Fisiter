@@ -4,19 +4,18 @@ import api from '../services/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
-  const [contraseña, setContraseña] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await api.post('/login', { email, password: contraseña });
-      localStorage.setItem('token', response.data.access_token);
+      const { data } = await api.post('/login', { email, password });
+      localStorage.setItem('token', data.access_token);
       setError('');
       navigate('/dashboard');
-    } catch (err) {
+    } catch {
       setError('Correo o contraseña incorrectos');
     }
   };
@@ -24,26 +23,28 @@ export default function Login() {
   return (
     <div className="page-container">
       <h2 className="text-center">Iniciar Sesión</h2>
+
       <form onSubmit={handleSubmit} className="form-container">
         <input
           type="email"
           placeholder="Correo electrónico"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Contraseña"
-          value={contraseña}
-          onChange={e => setContraseña(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button className="button" type="submit">Iniciar Sesión</button>
+        <button className="button" type="submit">Entrar</button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
+
       <p className="text-center">
-        ¿No tienes cuenta? <Link to="/registro" style={{ color: 'var(--color-secondary)' }}>Regístrate aquí</Link>
+        ¿No tienes cuenta? <Link to="/registro" style={{ color: 'var(--color-secondary)' }}>Regístrate</Link>
       </p>
     </div>
   );

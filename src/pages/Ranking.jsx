@@ -1,31 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { USUARIOS, getTotalPoints } from '../utils/usuarios';
 
-const Ranking = () => {
-  const [usuarios, setUsuarios] = useState([]);
-
-  useEffect(() => {
-    // Datos simulados
-    const rankingMock = [
-      { nombre: 'Ana López', puntos: 320 },
-      { nombre: 'Juan Pérez', puntos: 295 },
-      { nombre: 'Carla Ríos', puntos: 280 },
-    ];
-    setUsuarios(rankingMock);
-  }, []);
+export default function Ranking() {
+  /* Calculamos puntos de cada usuario y los ordenamos descendente */
+  const ranking = USUARIOS
+    .map(u => ({ nombre: u.nombre, puntos: getTotalPoints(u.id) }))
+    .sort((a, b) => b.puntos - a.puntos);
 
   return (
     <div className="page-container text-center">
-      <h2>Ranking de Participación</h2>
-      <p>Consulta el listado de los usuarios con mayor actividad registrada.</p>
-      <ol style={{ textAlign: 'left', maxWidth: '400px', margin: '1rem auto' }}>
-        {usuarios.map((u, idx) => (
-          <li key={idx}>
-            {u.nombre} – <strong>{u.puntos} pts</strong>
-          </li>
+      <h2>Ranking de Empleados</h2>
+      <ol style={{ textAlign: 'left', maxWidth: 400, margin: '1rem auto' }}>
+        {ranking.map(({ nombre, puntos }) => (
+          <li key={nombre}>{nombre} – <strong>{puntos} pts</strong></li>
         ))}
       </ol>
     </div>
   );
-};
-
-export default Ranking;
+}
