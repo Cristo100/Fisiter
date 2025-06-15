@@ -1,39 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { getActivities, getTotalPoints } from '../utils/usuarios';
+import { getActivities, getPurchases, getBalancePoints } from '../utils/usuarios';
 
 export default function Historial() {
-  const [actividades, setActividades] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [items, setItems] = useState([]);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    setActividades(getActivities());
-    setTotal(getTotalPoints());
+    const acts = getActivities().map(a => ({ ...a, tipo: 'actividad' }));
+    const pur = getPurchases().map(p => ({ ...p, tipo: 'compra', puntos: -p.costo }));
+    const todos = [...acts, ...pur].sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora));
+    setItems(todos);
+    setBalance(getBalancePoints());
   }, []);
 
   return (
-    <div className="page-container text-center" style={{ maxWidth: 700 }}>
-      <h2>Historial de Actividades</h2>
-      <p><strong>Puntos acumulados: {total}</strong></p>
+    <div className="page-container text-center" style={{ maxWidth: 750 }}>
+      <h2>Historial</h2>
+      <p><strong>Saldo actual: {balance} pts</strong></p>
 
-      {actividades.length === 0 ? (
-        <p>No tienes actividades registradas.</p>
+      {items.length === 0 ? (
+        <p>No existen registros.</p>
       ) : (
-        <table style={{ margin: 'auto', width: '100%', borderCollapse: 'collapse' }}>
+        <table style={{ margin:'auto', width:'100%', borderCollapse:'collapse' }}>
           <thead>
             <tr>
-              <th>Fecha</th><th>Hora</th><th>Ejercicio</th><th>Duración</th><th>Puntos</th>
+              <th>Fecha</th><th>Hora</th><th>Descripción</th><th>Puntos</th>
             </tr>
           </thead>
           <tbody>
-            {actividades.map(a => {
-              const d = new Date(a.fechaHora);
+            {items.map(it => {
+              const d = new Date(it.fechaHora);
+              const desc = it.tipo === 'actividad'
+                ? `${it.tipo.charAt(0).toUpperCase()}${it.tipo.slice(1)} – ${it.duracion} min de ${it.tipo === 'actividad' ? it.tipo : it.nombre}`
+                : `Compra – ${it.nombre}`;
               return (
-                <tr key={a.id}>
+                <tr key={it.id}>
                   <td>{d.toLocaleDateString()}</td>
-                  <td>{d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })}</td>
-                  <td>{a.tipo}</td>
-                  <td>{a.duracion} min</td>
-                  <td>{a.puntos}</td>
+                  <td>{d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</td>
+                  <td>{desc}</td>
+                  <td style={{ color: it.puntos < 0 ? 'red' : 'inherit' }}>
+                    {it.puntos > 0 ? `+${it.puntos}` : it.puntos}
+                  </td>
                 </tr>
               );
             })}

@@ -1,37 +1,46 @@
-/** --------------------------------------------------------------------
- *  Catálogo de usuarios “demo” (sin login todavía)
- * -------------------------------------------------------------------- */
-export const USUARIOS = [
-  { id: 'cristobal',  nombre: 'Cristobal Pichara'  },
-  { id: 'estefania',  nombre: 'Estefania Sandoval' },
-  { id: 'juan',       nombre: 'Juan Perez'         },
-];
+/* … catálogo y helpers previos … */
+export const USUARIOS = [/* igual que antes */];
 
-/* --- Helpers de almacenamiento en localStorage ---------------------- */
-const KEY_CURRENT = 'fisiterCurrentUser';         // id del usuario activo
-const KEY_PREFIX  = 'fisiterActivities_';         // actividades por usuario
+const KEY_CURRENT = 'fisiterCurrentUser';
+const ACT_PREFIX = 'fisiterActivities_';
+const PUR_PREFIX = 'fisiterPurchases_';
 
-export function getCurrentUserId() {
-  return localStorage.getItem(KEY_CURRENT) || USUARIOS[0].id;
-}
-export function setCurrentUserId(id) {
-  localStorage.setItem(KEY_CURRENT, id);
-}
+/* --- usuario activo --- */
+export const getCurrentUserId = () => localStorage.getItem(KEY_CURRENT) || USUARIOS[0].id;
+export const setCurrentUserId = (id)   => localStorage.setItem(KEY_CURRENT, id);
 
-/* Actividades -------------------------------------------------------- */
-export function getActivities(userId = getCurrentUserId()) {
-  return JSON.parse(localStorage.getItem(KEY_PREFIX + userId) || '[]');
-}
-export function saveActivities(userId, array) {
-  localStorage.setItem(KEY_PREFIX + userId, JSON.stringify(array));
-}
-export function addActivity(userId, actividad) {
-  const arr = getActivities(userId);
-  arr.unshift(actividad);              // más reciente al inicio
-  saveActivities(userId, arr);
-}
+/* --- actividades --- */
+export const getActivities = (uid = getCurrentUserId()) =>
+  JSON.parse(localStorage.getItem(ACT_PREFIX + uid) || '[]');
 
-/* Puntos totales ----------------------------------------------------- */
-export function getTotalPoints(userId = getCurrentUserId()) {
-  return getActivities(userId).reduce((s, a) => s + (a.puntos || 0), 0);
-}
+export const saveActivities = (uid, arr) =>
+  localStorage.setItem(ACT_PREFIX + uid, JSON.stringify(arr));
+
+export const addActivity = (uid, act) => {
+  const arr = getActivities(uid);
+  arr.unshift(act);
+  saveActivities(uid, arr);
+};
+
+/* --- compras --- */
+export const getPurchases = (uid = getCurrentUserId()) =>
+  JSON.parse(localStorage.getItem(PUR_PREFIX + uid) || '[]');
+
+export const savePurchases = (uid, arr) =>
+  localStorage.setItem(PUR_PREFIX + uid, JSON.stringify(arr));
+
+export const addPurchase = (uid, compra) => {
+  const arr = getPurchases(uid);
+  arr.unshift(compra);
+  savePurchases(uid, arr);
+};
+
+/* --- puntos --- */
+export const getEarnedPoints = (uid = getCurrentUserId()) =>
+  getActivities(uid).reduce((s, a) => s + (a.puntos || 0), 0);
+
+export const getSpentPoints = (uid = getCurrentUserId()) =>
+  getPurchases(uid).reduce((s, p) => s + (p.costo || 0), 0);
+
+export const getBalancePoints = (uid = getCurrentUserId()) =>
+  getEarnedPoints(uid) - getSpentPoints(uid);

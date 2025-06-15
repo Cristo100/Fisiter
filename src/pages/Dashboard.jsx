@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { getTotalPoints } from '../utils/usuarios';
+import { getBalancePoints } from '../utils/usuarios';
 
 export default function Dashboard() {
   const [puntos, setPuntos] = useState(0);
 
   useEffect(() => {
-    setPuntos(getTotalPoints());
+    setPuntos(getBalancePoints());
   }, []);
 
   return (
     <div className="page-container text-center">
       <h2>Dashboard</h2>
-      <p>Puntos acumulados: <strong>{puntos}</strong></p>
+      <p>
+        Puntos disponibles: <strong>{puntos}</strong>
+      </p>
     </div>
   );
 }
