@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/NavBar.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
-import HomePage from './pages/Homepage.jsx';
+import HomePage from './pages/HomePage.jsx';
 import Login from './pages/Login.jsx';
 import Registro from './pages/Registro.jsx';
 import Dashboard from './pages/Dashboard.jsx';
