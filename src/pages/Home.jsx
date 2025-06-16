@@ -7,7 +7,7 @@ import {
   getBalancePoints,
 } from '../utils/usuarios';
 
-/* Fallback seguro de usuarios */
+/* Fallback de usuarios */
 const SAFE_USERS =
   Array.isArray(BASE_USERS) && BASE_USERS.length
     ? BASE_USERS
@@ -19,7 +19,7 @@ const SAFE_USERS =
 
 const isValidId = (id) => SAFE_USERS.some((u) => u.id === id);
 
-export default function HomePage() {
+export default function Home() {
   const initialId = (() => {
     const saved = getCurrentUserId();
     return isValidId(saved) ? saved : SAFE_USERS[0].id;
@@ -28,7 +28,7 @@ export default function HomePage() {
   const [userId, setUserId] = useState(initialId);
   const [puntos, setPuntos] = useState(getBalancePoints(initialId));
 
-  /* Actualizar saldo al cambiar usuario */
+  /* actualizar saldo al cambiar usuario */
   useEffect(() => {
     setCurrentUserId(userId);
     setPuntos(getBalancePoints(userId));
@@ -38,7 +38,7 @@ export default function HomePage() {
     SAFE_USERS.find((u) => u.id === userId)?.nombre ?? 'Usuario';
   const saludo = nombreActual.split(' ')[0];
 
-  /* Estilos */
+  /* estilos */
   const cardCss = {
     display: 'flex',
     flexDirection: 'column',
@@ -66,7 +66,7 @@ export default function HomePage() {
 
   return (
     <div className="page-container text-center" style={{ maxWidth: 950 }}>
-      {/* Selector de usuario */}
+      {/* selector de usuario */}
       <label style={{ display: 'block', marginBottom: '1rem' }}>
         Usuario activo:&nbsp;
         <select value={userId} onChange={(e) => setUserId(e.target.value)}>
@@ -83,7 +83,7 @@ export default function HomePage() {
         Puntos disponibles: <strong>{puntos}</strong>
       </p>
 
-      {/* Tarjetas de navegación */}
+      {/* accesos rápidos */}
       <div style={gridCss}>
         <Link to="/registrar-actividad" style={cardCss}>
           <h3>Registrar</h3>
