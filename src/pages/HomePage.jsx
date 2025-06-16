@@ -1,56 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  USUARIOS as BASE_USERS,          // podría venir undefined
+  USUARIOS as BASE_USERS,
   getCurrentUserId,
   setCurrentUserId,
   getBalancePoints,
 } from '../utils/usuarios';
 
-/* ------------------------------------------------------------------ */
-/* 1. Arreglo seguro de usuarios  (fallback si la importación falla)   */
-/* ------------------------------------------------------------------ */
-const SAFE_USERS = Array.isArray(BASE_USERS) && BASE_USERS.length > 0
-  ? BASE_USERS
-  : [
-      { id: 'cristobal', nombre: 'Cristobal Pichara' },
-      { id: 'estefania', nombre: 'Estefania Sandoval' },
-      { id: 'juan',      nombre: 'Juan Perez' },
-    ];
+/* Fallback seguro de usuarios */
+const SAFE_USERS =
+  Array.isArray(BASE_USERS) && BASE_USERS.length
+    ? BASE_USERS
+    : [
+        { id: 'cristobal', nombre: 'Cristobal Pichara' },
+        { id: 'estefania', nombre: 'Estefania Sandoval' },
+        { id: 'juan', nombre: 'Juan Perez' },
+      ];
 
-/* Helper para validar IDs */
 const isValidId = (id) => SAFE_USERS.some((u) => u.id === id);
 
 export default function HomePage() {
-  /* ------------------------------------------------------------------ */
-  /* 2. Usuario activo con fallback seguro                              */
-  /* ------------------------------------------------------------------ */
   const initialId = (() => {
     const saved = getCurrentUserId();
     return isValidId(saved) ? saved : SAFE_USERS[0].id;
   })();
 
-  const [userId, setUserId]   = useState(initialId);
-  const [puntos, setPuntos]   = useState(getBalancePoints(initialId));
+  const [userId, setUserId] = useState(initialId);
+  const [puntos, setPuntos] = useState(getBalancePoints(initialId));
 
-  /* ------------------------------------------------------------------ */
-  /* 3. Sincronizar cuando cambia userId                                */
-  /* ------------------------------------------------------------------ */
+  /* Actualizar saldo al cambiar usuario */
   useEffect(() => {
     setCurrentUserId(userId);
     setPuntos(getBalancePoints(userId));
   }, [userId]);
 
-  /* ------------------------------------------------------------------ */
-  /* 4. Nombre seguro y fragmento para saludo                           */
-  /* ------------------------------------------------------------------ */
   const nombreActual =
     SAFE_USERS.find((u) => u.id === userId)?.nombre ?? 'Usuario';
-  const saludo = nombreActual.split(' ')[0];   // siempre string
+  const saludo = nombreActual.split(' ')[0];
 
-  /* ------------------------------------------------------------------ */
-  /* 5. Estilos reutilizados                                            */
-  /* ------------------------------------------------------------------ */
+  /* Estilos */
   const cardCss = {
     display: 'flex',
     flexDirection: 'column',
@@ -72,15 +60,12 @@ export default function HomePage() {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
     gap: 20,
-    maxWidth: 800,
+    maxWidth: 900,
     margin: '2rem auto',
   };
 
-  /* ------------------------------------------------------------------ */
-  /* 6. Render                                                          */
-  /* ------------------------------------------------------------------ */
   return (
-    <div className="page-container text-center" style={{ maxWidth: 900 }}>
+    <div className="page-container text-center" style={{ maxWidth: 950 }}>
       {/* Selector de usuario */}
       <label style={{ display: 'block', marginBottom: '1rem' }}>
         Usuario activo:&nbsp;
@@ -98,6 +83,7 @@ export default function HomePage() {
         Puntos disponibles: <strong>{puntos}</strong>
       </p>
 
+      {/* Tarjetas de navegación */}
       <div style={gridCss}>
         <Link to="/registrar-actividad" style={cardCss}>
           <h3>Registrar</h3>
@@ -122,6 +108,10 @@ export default function HomePage() {
         <Link to="/inventario" style={cardCss}>
           <h3>Inventario</h3>
           <p>Tus objetos</p>
+        </Link>
+        <Link to="/sobre-nosotros" style={cardCss}>
+          <h3>Sobre&nbsp;Nosotros</h3>
+          <p>Nuestra historia</p>
         </Link>
       </div>
     </div>
