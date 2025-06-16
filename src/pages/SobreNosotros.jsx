@@ -32,7 +32,7 @@ export default function SobreNosotros() {
           <li>
             <strong>Informe de bienestar&nbsp;</strong>— Recursos Humanos usa
             los datos agregados para medir la participación y plantear nuevas
-            iniciativas de salud ocupacional.
+            iniciativas de salud ocupacional..
           </li>
         </ul>
       </section>
