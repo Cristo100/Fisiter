@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 /* Componentes & páginas */
-import Navbar          from './components/Navbar.jsx';
+import Nav          from './components/Nav.jsx';
 import PrivateRoute    from './components/PrivateRoute.jsx';
 import Home            from './pages/Home.jsx';             // ← CORRECTO
 import Login           from './pages/Login.jsx';
@@ -18,7 +18,7 @@ import SobreNosotros   from './pages/SobreNosotros.jsx';
 export default function App() {
   return (
     <>
-      <Navbar />
+      <Nav />
 
       <Routes>
         <Route path="/"            element={<Home />} />
