@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getActivities, getTotalPoints } from '../utils/usuarios';
+import { obtenerActividades, obtenerPuntosTotales } from '../utils/storage';
 
 export default function Historial() {
   const [actividades, setActividades] = useState([]);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    setActividades(getActivities());
-    setTotal(getTotalPoints());
+    setActividades(obtenerActividades());
+    setTotal(obtenerPuntosTotales());
   }, []);
 
   return (
@@ -30,7 +30,7 @@ export default function Historial() {
               return (
                 <tr key={a.id}>
                   <td>{d.toLocaleDateString()}</td>
-                  <td>{d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })}</td>
+                  <td>{d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
                   <td>{a.tipo}</td>
                   <td>{a.duracion} min</td>
                   <td>{a.puntos}</td>

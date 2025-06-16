@@ -1,10 +1,14 @@
 import React from 'react';
-import { USUARIOS, getTotalPoints } from '../utils/usuarios';
+import { obtenerUsuarios } from '../utils/storage';
 
 export default function Ranking() {
-  /* Calculamos puntos de cada usuario y los ordenamos descendente */
-  const ranking = USUARIOS
-    .map(u => ({ nombre: u.nombre, puntos: getTotalPoints(u.id) }))
+  const usuarios = obtenerUsuarios();
+
+  const ranking = usuarios
+    .map(u => ({
+      nombre: u.nombre,
+      puntos: u.actividades.reduce((sum, a) => sum + a.puntos, 0)
+    }))
     .sort((a, b) => b.puntos - a.puntos);
 
   return (

@@ -1,16 +1,22 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EJERCICIOS, calcularPuntos } from '../utils/ejercicios';
-import { getCurrentUserId, addActivity } from '../utils/usuarios';
+import { agregarActividad, obtenerUsuarioActual } from '../utils/storage';
 
 export default function RegistrarActividad() {
   const [idEjercicio, setIdEjercicio] = useState(EJERCICIOS[0].id);
   const [duracion, setDuracion]       = useState('');
   const navigate = useNavigate();
-  const userId = getCurrentUserId();
+  const usuario = obtenerUsuarioActual();
+
+  if (!usuario) {
+    // Si no hay usuario, redirigimos o mostramos mensaje
+    navigate('/login');
+    return null;
+  }
 
   const puntosPreview = useMemo(
-    () => calcularPuntos(idEjercicio, parseInt(duracion, 10)),
+    () => calcularPuntos(idEjercicio, parseInt(duracion, 10) || 0),
     [idEjercicio, duracion]
   );
 
@@ -23,14 +29,15 @@ export default function RegistrarActividad() {
     }
 
     const puntos = calcularPuntos(idEjercicio, minutos);
-    addActivity(userId, {
+    const actividad = {
       id: Date.now(),
       tipo: EJERCICIOS.find(e => e.id === idEjercicio).nombre,
       duracion: minutos,
       fechaHora: new Date().toISOString(),
       puntos,
-    });
+    };
 
+    agregarActividad(actividad);
     alert(`¡Registrado! Ganaste ${puntos} puntos.`);
     navigate('/historial');
   };
@@ -40,7 +47,9 @@ export default function RegistrarActividad() {
       <h2>Registrar Actividad</h2>
       <form onSubmit={handleSubmit} className="form-container">
         <select value={idEjercicio} onChange={e => setIdEjercicio(e.target.value)}>
-          {EJERCICIOS.map(({ id, nombre }) => <option key={id} value={id}>{nombre}</option>)}
+          {EJERCICIOS.map(({ id, nombre }) => (
+            <option key={id} value={id}>{nombre}</option>
+          ))}
         </select>
 
         <input

@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../services/api';
+import { iniciarSesion } from '../utils/storage';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]     = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError]     = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     try {
-      const { data } = await api.post('/login', { email, password });
-      localStorage.setItem('token', data.access_token);
-      setError('');
+      iniciarSesion(email, password);
       navigate('/dashboard');
-    } catch {
-      setError('Correo o contraseña incorrectos');
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -24,7 +22,7 @@ export default function Login() {
     <div className="page-container">
       <h2 className="text-center">Iniciar Sesión</h2>
 
-      <form onSubmit={handleSubmit} className="form-container">
+      <form onSubmit={handleLogin} className="form-container">
         <input
           type="email"
           placeholder="Correo electrónico"
