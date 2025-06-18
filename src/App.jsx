@@ -26,7 +26,7 @@ export default function App() {
         <Route path="/sobre-nosotros"      element={<SobreNosotros />} />
 
         {/*  Pública por ahora; envuelta en PrivateRoute para el futuro */}
-        <Route path="/dashboard"           element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/dashboard"           element={<Dashboard />} />
 
         <Route path="/registrar-actividad" element={<RegistrarActividad />} />
         <Route path="/historial"           element={<Historial />} />

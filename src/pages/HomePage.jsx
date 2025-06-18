@@ -1,55 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  obtenerUsuarioActual,
-  obtenerUsuarios,
-  obtenerPuntosTotales,
-  setUsuarioActual
-} from '../utils/storage';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { obtenerUsuarioActual, obtenerPuntosTotales } from '../utils/storage';
 
 export default function HomePage() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [userId, setUserId] = useState(null);
-  const [puntos, setPuntos] = useState(0);
   const [nombre, setNombre] = useState('');
+  const [puntos, setPuntos] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const actual = obtenerUsuarioActual();
-    const all = obtenerUsuarios();
-    if (actual) {
-      setUserId(actual.id);
-      setNombre(actual.nombre);
-      setPuntos(obtenerPuntosTotales());
-    } else {
-      setUserId(null);
-      setNombre('');
-      setPuntos(0);
-    }
-    setUsuarios(all);
-  }, []);
-
-  // Redirigir al login si no hay usuario actual
-  useEffect(() => {
-    if (!userId) {
+    const user = obtenerUsuarioActual();
+    if (!user) {
       navigate('/login');
-    }
-  }, [userId, navigate]);
-
-  // Actualizar nombre y puntos cuando cambia el userId o lista de usuarios
-  useEffect(() => {
-    if (userId) {
-      const nuevoUser = usuarios.find(u => u.id === userId);
-      setNombre(nuevoUser?.nombre ?? '');
+    } else {
+      setNombre(user.nombre);
       setPuntos(obtenerPuntosTotales());
     }
-  }, [userId, usuarios]);
-
-  const handleUserChange = (e) => {
-    const nuevoId = e.target.value;
-    setUserId(nuevoId);
-    setUsuarioActual(nuevoId);
-  };
+  }, [navigate]);
 
   const cardCss = {
     display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
@@ -65,14 +31,7 @@ export default function HomePage() {
 
   return (
     <div className="page-container text-center" style={{ maxWidth: 900 }}>
-      <label style={{ display: 'block', marginBottom: '1rem' }}>
-        Usuario activo:&nbsp;
-        <select value={userId || ''} onChange={handleUserChange}>
-          {usuarios.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
-        </select>
-      </label>
-
-      <h1>¡Hola {nombre?.split(' ')[0] || 'invitado'}!</h1>
+      <h1>¡Hola {nombre.split(' ')[0]}!</h1>
       <p className="subtitle">
         Puntos acumulados: <strong>{puntos}</strong>
       </p>
