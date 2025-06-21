@@ -1,8 +1,12 @@
 import React from 'react';
+<<<<<<< HEAD
 import {
   USUARIOS as BASE_USERS,
   getBalancePoints,
 } from '../utils/usuarios';
+=======
+import { obtenerUsuarios } from '../utils/storage';
+>>>>>>> SANDOVAL
 
 /* ------------------------------------------------------------------ */
 /* Arreglo seguro de usuarios                                         */
@@ -19,11 +23,20 @@ const SAFE_USERS = Array.isArray(BASE_USERS) && BASE_USERS.length > 0
 /* Ranking                                                            */
 /* ------------------------------------------------------------------ */
 export default function Ranking() {
+<<<<<<< HEAD
   /* Mapa nombre → puntos (si algún id es nuevo, devuelve 0) */
   const ranking = SAFE_USERS
     .map(({ id, nombre }) => ({
       nombre,
       puntos: getBalancePoints(id) || 0,
+=======
+  const usuarios = obtenerUsuarios();
+
+  const ranking = usuarios
+    .map(u => ({
+      nombre: u.nombre,
+      puntos: u.actividades.reduce((sum, a) => sum + a.puntos, 0)
+>>>>>>> SANDOVAL
     }))
     .sort((a, b) => b.puntos - a.puntos);
 
