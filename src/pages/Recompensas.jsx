@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
 import { RECOMPENSAS } from '../utils/recompensas';
-import { getCurrentUserId, addPurchase, getBalancePoints } from '../utils/usuarios';
+import {
+  obtenerUsuarioActual,
+  obtenerPuntosTotales,
+  agregarActividad,
+} from '../utils/storage';
 
 export default function Recompensas() {
-  const [balance, setBalance] = useState(getBalancePoints());
-  const uid = getCurrentUserId();
+  const [balance, setBalance] = useState(obtenerPuntosTotales());
+  const usuario = obtenerUsuarioActual();
 
   const handleCanje = (recompensa) => {
     if (balance < recompensa.costo) {
       alert('No tienes puntos suficientes.');
       return;
     }
-    /* registrar compra */
-    addPurchase(uid, {
+
+    // Registrar el canje como una actividad
+    agregarActividad({
       id: Date.now(),
-      nombre: recompensa.nombre,
-      costo: recompensa.costo,
+      nombre: `Canje: ${recompensa.nombre}`,
+      puntos: -recompensa.costo,
       fechaHora: new Date().toISOString(),
     });
+
     setBalance(balance - recompensa.costo);
     alert(`¡Canje exitoso! Obtuviste “${recompensa.nombre}”.`);
   };
+
+  if (!usuario) {
+    return <p>No hay sesión activa.</p>;
+  }
 
   return (
     <div className="page-container text-center">

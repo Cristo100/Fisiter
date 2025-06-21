@@ -55,6 +55,12 @@ export function obtenerActividades() {
   return user ? user.actividades : [];
 }
 
+export function obtenerCompras() {
+  const actividades = obtenerActividades();
+  // Asumiendo que las compras tienen nombre que empieza con "Canje:"
+  return actividades.filter(act => act.nombre.startsWith('Canje:'));
+}
+
 export function obtenerPuntosTotales() {
   return obtenerActividades().reduce((sum, act) => sum + act.puntos, 0);
 }

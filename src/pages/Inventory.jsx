@@ -1,8 +1,8 @@
 import React from 'react';
-import { getPurchases } from '../utils/usuarios';
+import { obtenerCompras } from '../utils/storage';
 
 export default function Inventory() {
-  const compras = getPurchases();
+  const compras = obtenerCompras();
 
   return (
     <div className="page-container text-center" style={{ maxWidth: 600 }}>
@@ -15,9 +15,9 @@ export default function Inventory() {
             const d = new Date(c.fechaHora);
             return (
               <li key={c.id} style={{ marginBottom: '.7rem' }}>
-                <strong>{c.nombre}</strong> — {c.costo} pts &nbsp;
+                <strong>{c.nombre.replace('Canje: ', '')}</strong> — {Math.abs(c.puntos)} pts &nbsp;
                 <span style={{ color: 'var(--color-muted)', fontSize: '.85rem' }}>
-                  ({d.toLocaleDateString()}&nbsp;{d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})})
+                  ({d.toLocaleDateString()}&nbsp;{d.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' })})
                 </span>
               </li>
             );
